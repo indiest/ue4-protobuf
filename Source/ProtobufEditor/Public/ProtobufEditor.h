@@ -25,6 +25,7 @@ private:
 	void AddMenuExtension(FMenuBuilder& Builder);
 
 	FString GetProtocPath()const;
+	FString GetProtocIncludePath() const;
 	void ExecuteProtoc(const FString& pProtocExe, const FString& pProtoFilePath, FString pOutPath=TEXT(""), FString pLang=TEXT("cpp"),bool pWaitProcExit=false);
 	void RenameAllProtoCodeFiles(const FString& PbCcPath);
 	void DeleteAllProtoCodeFile(const FString& PbPath);

@@ -68,7 +68,7 @@ void FProtobufEditorModule::PluginButtonClicked()
 	FString ProtoPath= FPaths::GameSourceDir();
 	DeleteAllProtoCodeFile(ProtoPath); 
 	ExecuteProtoc(GetProtocPath(), ProtoPath);
-	// RenameAllProtoCodeFiles(ProtoPath);
+	RenameAllProtoCodeFiles(ProtoPath);
 }
 
 void FProtobufEditorModule::AddMenuExtension(FMenuBuilder& Builder)
@@ -88,6 +88,24 @@ FString FProtobufEditorModule::GetProtocPath()const
 	FString PluginPath=IPluginManager::Get().FindPlugin(TEXT("Protobuf"))->GetBaseDir();
 	PluginPath.Append(TEXT(""));
 	FString ProtocExe=FPaths::Combine(PluginPath, TEXT("Source/Protobuf/ThirdParty/protobuf/bin/protoc.exe"));
+	if (FPaths::FileExists(ProtocExe))
+	{
+		RetPath = ProtocExe;
+	}
+	else
+	{
+		RetPath = TEXT("");
+	}
+	return RetPath;
+}
+
+
+FString FProtobufEditorModule::GetProtocIncludePath()const
+{
+	FString RetPath;
+	FString PluginPath = IPluginManager::Get().FindPlugin(TEXT("Protobuf"))->GetBaseDir();
+	PluginPath.Append(TEXT(""));
+	FString ProtocExe = FPaths::Combine(PluginPath, TEXT("Source/Protobuf/ThirdParty/protobuf/include/google/protobuf"));
 	if (FPaths::FileExists(ProtocExe))
 	{
 		RetPath = ProtocExe;
@@ -123,8 +141,9 @@ void FProtobufEditorModule::ExecuteProtoc(const FString& pProtocExe, const FStri
 			OutParams.Append(TEXT("\"") + local_ProtoPath +TEXT("\""));
 		}
 
-		FString CommandParams = (TEXT("--proto_path=\"") + local_ProtoPath + TEXT("\"")) + 
-								(TEXT(" \"") + ProtoFile +TEXT("\"") + TEXT(" ")) + OutParams;
+		FString CommandParams = FString::Printf(TEXT("--proto_path=\"%s\" -I \"%s\" \"%s\" %s"), *local_ProtoPath, *GetProtocIncludePath(), *ProtoFile, *OutParams);
+		//FString CommandParams = (TEXT("--proto_path=\"") + local_ProtoPath + TEXT("\"")) + 
+		//						(TEXT(" \"") + ProtoFile +TEXT("\"") + TEXT(" ")) + OutParams;
 		// FProcHandle ProtocProcIns=FPlatformProcess::CreateProc(*pProtocExe, *CommandParams, true, false, NULL, NULL, NULL, NULL, NULL);
 		FProcWorkerThread ProtoGenWorker(*local_ProtoPath, *pProtocExe, *CommandParams);
 		ProtoGenWorker.Run();
@@ -158,6 +177,7 @@ void FProtobufEditorModule::RenameAllProtoCodeFiles(const FString& PbCcPath)
 			if (!NewFile.IsEmpty())
 			{
 				IFileManager::Get().Move(*NewFile, *File);
+				UE_LOG(LogTemp, Log, TEXT("Renamed %s to %s"), *File, *NewFile);
 			}
 		}
 	}
