@@ -29,7 +29,7 @@ For protobuf v3.21.x
 #### 2. Convert Protobuf Source
 
 1. Use [adapte script](https://github.com/metaworking/adapt-protobuf-to-ue) to convert protobuf source
-2. Copy the conversion result to `Source/Protobuf/ThirdParty/google`
+2. Copy the conversion result to `Source/Protobuf/ThirdParty/google` in **ue4-protobuf dir** 
 
 #### 3. Compile Protoc
 
@@ -62,4 +62,4 @@ For protobuf v3.21.x
     
     nmake -nologo install
     ```
-4. Copy the `bin/protoc.exe` binary file to `Source/Protobuf/ThirdParty/bin/`
+4. Copy the `/bin/protoc.exe` binary file in **protobuf repo dir** to `/Source/Protobuf/ThirdParty/bin/` in **ue4-protobuf dir** 
