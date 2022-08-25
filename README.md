@@ -33,7 +33,7 @@ For protobuf v3.21.x
 
 #### 3. Compile Protoc
 
-1. Clone [modified protobuf](https://github.com/metaworking/protobuf) `https://github.com/metaworking/protobuf.git`
+1. Clone [modified protobuf](https://github.com/metaworking/protobuf) `git clone https://github.com/metaworking/protobuf.git`
 2. Go to protobuf repo dir
 3. Run cmd to complie protoc.exe
     ```
